@@ -14,7 +14,6 @@ const envlocal = await load({
 
 const ServerEnvironmentSchema = ClientEnvironmentSchema.extend({
   BETTER_AUTH_SECRET: z.string(),
-  DISCORD_TOKEN: z.string(),
   DISCORD_CLIENT_SECRET: z.string(),
   DATABASE_URL: z.string(),
 });
