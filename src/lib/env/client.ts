@@ -1,4 +1,4 @@
-import z from "zod";
+import { ClientEnvironmentSchema } from "./schemas.ts";
 
 async function getServerEnv() {
   const { load } = await import("@std/dotenv");
@@ -15,11 +15,6 @@ async function getServerEnv() {
     ...denoenv,
   };
 }
-
-export const ClientEnvironmentSchema = z.object({
-  VITE_BETTER_AUTH_URL: z.string(),
-  VITE_DISCORD_CLIENT_ID: z.string(),
-});
 
 const env = ClientEnvironmentSchema.parse(
   import.meta.env ?? (await getServerEnv()),
