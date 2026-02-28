@@ -72,3 +72,45 @@ Deno.test("ServerEnvironmentSchema - parsed output contains all fields", () => {
   );
   assertEquals(result.data.DATABASE_URL, validServer.DATABASE_URL);
 });
+
+Deno.test("ClientEnvironmentSchema - rejects null field values", () => {
+  const result = ClientEnvironmentSchema.safeParse({
+    VITE_BETTER_AUTH_URL: null,
+    VITE_DISCORD_CLIENT_ID: "id",
+  });
+  assertEquals(result.success, false);
+});
+
+Deno.test("ClientEnvironmentSchema - rejects numeric field values", () => {
+  const result = ClientEnvironmentSchema.safeParse({
+    VITE_BETTER_AUTH_URL: 42,
+    VITE_DISCORD_CLIENT_ID: "id",
+  });
+  assertEquals(result.success, false);
+});
+
+Deno.test("ClientEnvironmentSchema - strips extra fields", () => {
+  const result = ClientEnvironmentSchema.safeParse({
+    ...validClient,
+    EXTRA_KEY: "should-not-appear",
+  });
+  assert(result.success);
+  assertEquals("EXTRA_KEY" in result.data, false);
+});
+
+Deno.test("ServerEnvironmentSchema - strips extra fields", () => {
+  const result = ServerEnvironmentSchema.safeParse({
+    ...validServer,
+    EXTRA_KEY: "should-not-appear",
+  });
+  assert(result.success);
+  assertEquals("EXTRA_KEY" in result.data, false);
+});
+
+Deno.test("ClientEnvironmentSchema - accepts empty string values", () => {
+  const result = ClientEnvironmentSchema.safeParse({
+    VITE_BETTER_AUTH_URL: "",
+    VITE_DISCORD_CLIENT_ID: "",
+  });
+  assertEquals(result.success, true);
+});

@@ -19,3 +19,17 @@ Deno.test("keys - preserves string key types", () => {
   const result: (keyof typeof obj)[] = keys(obj);
   assertEquals(result.sort(), ["baz", "foo"]);
 });
+
+Deno.test("keys - does not include inherited properties", () => {
+  const proto = { inherited: true };
+  const obj = Object.create(proto) as { own?: number };
+  obj.own = 1;
+  const result = keys(obj);
+  assertEquals(result, ["own"]);
+});
+
+Deno.test("keys - returns numeric keys as strings", () => {
+  const obj: Record<string, string> = { 0: "a", 1: "b" };
+  const result = keys(obj);
+  assertEquals(result.sort(), ["0", "1"]);
+});
