@@ -1,9 +1,9 @@
 services:
   db:
-    container_name: dex-db
+    container_name: rustack-db
     image: postgres:18
     environment:
-      POSTGRES_USER: dex
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: postgres
     ports:
